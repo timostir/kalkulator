@@ -14,7 +14,27 @@
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0;font:14px system-ui,-apple-system,sans-serif}
 [hidden]{display:none!important}
+/* home-screen app: fill the whole screen, keep the name clear of the blur under the clock */
+html.standalone,html.standalone body{overflow:hidden;overscroll-behavior:none}
+html.standalone body{padding-top:22px!important;padding-bottom:4px!important}
 </style>
+<script>
+(function(){
+  var st = navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+  if (!st) return;
+  var r = document.documentElement;
+  r.classList.add('standalone');
+  function fit(){
+    var h = window.innerHeight;
+    // iOS reports the page as shorter than the screen by the status-bar height
+    if (window.innerWidth < h && screen.height > h && screen.height - h < 90) h = screen.height;
+    r.style.height = h + 'px';
+  }
+  fit();
+  addEventListener('resize', fit);
+  addEventListener('orientationchange', function(){ setTimeout(fit, 300); });
+})();
+</script>
 <title>KALKULATOR</title>
 
 <meta name="claude:viewport-fit-sides" content="cover">
